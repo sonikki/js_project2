@@ -19,17 +19,10 @@
             var subreddit = document.getElementById("subreddit").value;
             var url = "https://www.reddit.com/r/" + subreddit + "/.json";
             document.getElementById("tulos").innerHTML += "fetching data from: " + url;
-            function handleErrors(response) {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                    
-                }
-                return response;
-            }
-            fetch(url)
-                .then(handleErrors)
-                .then(response => response.json())
-                .then(data => listPosts(data));
+           fetch (url)
+           .then(response => response.json())
+           .then(data => listPosts(data))
+           .catch(document.getElementById("tulos").innerHTML = "Subreddittiä " +document.getElementById("subreddit").value+" ei ole olemassa.")
 
         }
 
