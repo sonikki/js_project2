@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h1>Reddit checker</h1>
+
+    <p>Gets the top 10 posts from a user defined subreddit.</p>
+
+    <p>Click the button to get the top 10 posts from the given subreddit.</p>
+    <input id="subreddit"> </input>
+    <button id="btn1">Click me</button>
+
+    <p id="tulos"></p>
+
+    <script>
+        document.getElementById("btn1").addEventListener("click", myFunction);
+        function myFunction() {
+            var subreddit = document.getElementById("subreddit").value;
+            var url = "https://www.reddit.com/r/" + subreddit + "/.json";
+            document.getElementById("tulos").innerHTML += "fetching data from: " + url;
+            function handleErrors(response) {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                    
+                }
+                return response;
+            }
+            fetch(url)
+                .then(handleErrors)
+                .then(response => response.json())
+                .then(data => listPosts(data));
+
+        }
+
+
+
+        function listPosts(redditObject) {
+            document.getElementById("tulos").innerHTML = "";
+            for (var i = 0; i < 10; i++) {
+                var title = redditObject.data.children[i].data.title;
+                var posturl = redditObject.data.children[i].data.url;
+                var posthtml = "<a href=\"" + posturl + "\">" + title + "</a><br>";
+                document.getElementById("tulos").innerHTML += posthtml;
+            }
+
+
+        }
+    </script>
+
+</body>
+
+</html>
