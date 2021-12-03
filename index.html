@@ -1,39 +1,98 @@
 <!DOCTYPE html>
+<head>
+    <title>Reddit checker</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="stylesheet.css" />
+</head>
+
 <html>
 
 <body>
 
     <h1>Reddit checker</h1>
 
-    <p>Gets the top 10 posts from a user defined subreddit.</p>
+    <p>Gets user defined amount of posts within user defined timeframe from a user defined subreddit.</p>
 
-    <p>Click the button to get the top 10 posts from the given subreddit.</p>
-    <input id="subreddit"> </input>
-    <button id="btn1">Click me</button>
+    <p>Click the button to get the top posts from the given subreddit.</p>
+    <div id="input"> 
+        
+    <input name="search" type="search" required placeholder="subreddit name" id="subreddit"> </input>
+    <button id="btn1">Check it</button>
+   
+   Posts:
+    <select id="posts" name="posts"> 
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+      Timeframe:
+    <select id="time" name="time">
+        <option value="all">All</option>
+        <option value="year">Year</option>
+        <option value="month">Month</option>
+        <option value="week">Week</option>
+        <option value="day">Day</option>
+        <option value="hour">Hour</option>
+      </select>
+    </div>
+    </div>
 
     <p id="tulos"></p>
 
     <script>
+        
         document.getElementById("btn1").addEventListener("click", myFunction);
-        function myFunction() {
-            var subreddit = document.getElementById("subreddit").value;
-            var url = "https://www.reddit.com/r/" + subreddit + "/.json";
-            document.getElementById("tulos").innerHTML += "fetching data from: " + url;
-           fetch (url)
-           .then(response => response.json())
-           .then(data => listPosts(data))
-           .catch(document.getElementById("tulos").innerHTML = "Subreddittiä " +document.getElementById("subreddit").value+" ei ole olemassa.")
-
-        }
-
-
-
-        function listPosts(redditObject) {
+        
+        async function myFunction() {
+            
+            
+            var subreddit = document.getElementById("subreddit").value; // get the subreddit value from input
+            if (!subreddit) throw new Error("no input");
+            var posts = document.getElementById("posts").value; // get the amount of posts from the select menu
+            var time = document.getElementById("time").value; // get the timeframe from the select menu
+           // var url = "https://www.reddit.com/r/" + subreddit + "/.json";     // old version, improved below
+           var url = new URL("https://www.reddit.com/");
+            url.pathname = `/r/${subreddit}/top/.json`;
+            url.searchParams.set("t",time); // "all", "year", "month", "week", "day", or "hour" 
+            url.searchParams.set("limit",posts); // default: 25, maximum: 100
             document.getElementById("tulos").innerHTML = "";
-            for (var i = 0; i < 10; i++) {
+            document.getElementById("tulos").innerHTML += "fetching data from: " + url;
+           //  function handleErrors(response) {
+          //      if (!response.ok) {                                  // the old way of handling errors. 
+          //          throw Error(response.statusText);          
+          //           }
+          //     return response;
+          //                  }
+            
+           // fetch(url)
+            //    .then(handleErrors)
+             //   .then(response => response.json())
+              //  .then(data => listPosts(data));
+               try{
+                   var response = await fetch(url)
+                   var data = await response.json()
+                   listPosts(data)
+               } catch (e) {
+                   
+                   document.getElementById("tulos").innerHTML = "Error! Subreddit probably doesnt exist! ";
+                   console.log(e.message);
+               }
+              
+                
+        }
+    
+        
+
+        function listPosts(redditObject) {              // listing the posts below the input bar. Results open in new tab.
+            var posts = document.getElementById("posts").value;
+            document.getElementById("tulos").innerHTML = "";
+            for (var i = 0; i < posts; i++) {
                 var title = redditObject.data.children[i].data.title;
                 var posturl = redditObject.data.children[i].data.url;
-                var posthtml = "<a href=\"" + posturl + "\">" + title + "</a><br>";
+                var posthtml = "<a target=\"_blank\" href=\"" + posturl + "\">" + title + "</a><br>";
                 document.getElementById("tulos").innerHTML += posthtml;
             }
 
