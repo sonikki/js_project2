@@ -1,0 +1,84 @@
+p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 700px;
+    padding: 1px;
+}
+
+div {
+    padding: 0.5px;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    background: grey;
+    min-height: 8rem;
+    max-width: 750px;
+    padding: 0.5rem;
+}
+
+#instructions_1,
+#instructions_2 {
+    display: flex;
+    align-items: center;
+    background: lightgray;
+    min-height: 1rem;
+    max-width: 750px;
+    padding: 0.5rem;
+}
+
+#searchbar {
+    display: flex;
+    align-items: center;
+    background: lightgray;
+    min-height: 2rem;
+    max-width: 750px;
+    padding: 0.5rem;
+}
+
+input {
+    border: none;
+    appearance: none;
+    background: white;
+    border-radius: 3px;
+    padding: 6px;
+    width: 250px;
+    outline: none;
+}
+
+button {
+    padding: 6px;
+}
+
+select {
+    padding: 3px;
+}
+
+h1 {
+    color: black;
+}
+
+#tulos {
+    padding: 0.5rem;
+    background: #eaeaea;
+    max-width: 750px;
+    min-height: 2rem;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}
